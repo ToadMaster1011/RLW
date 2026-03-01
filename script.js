@@ -1,0 +1,369 @@
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* === VIEWPORT FIT FOR GALLERY === */
+(function() {
+  const root = document.documentElement;
+  const header = document.querySelector('.site-header');
+
+  function updateHeaderHeightVar() {
+    const headerHeight = header ? header.offsetHeight : 0;
+    root.style.setProperty('--header-height', `${headerHeight}px`);
+  }
+
+  updateHeaderHeightVar();
+  window.addEventListener('resize', updateHeaderHeightVar);
+  window.addEventListener('orientationchange', updateHeaderHeightVar);
+})();
+
+/* === GALLERY PREMIUM SLIDER === */
+(function() {
+  const slider = document.getElementById('gallery-slider');
+  if (!slider) return;
+
+  const track = slider.querySelector('.gallery-track');
+  const dotsContainer = slider.querySelector('.gallery-dots');
+  const prevBtn = slider.querySelector('.gallery-nav.prev');
+  const nextBtn = slider.querySelector('.gallery-nav.next');
+  const sourceElements = Array.from(slider.querySelectorAll('.gallery-source li'));
+  const parseImages = (value, fallback) => {
+    if (!value) return [fallback].filter(Boolean);
+    return value.split('|').map((entry) => entry.trim()).filter(Boolean);
+  };
+
+  const sourceItems = sourceElements.map((item, index) => ({
+    id: item.dataset.projectId || `project-${index + 1}`,
+    src: item.dataset.src,
+    alt: item.dataset.alt || 'Gallery image',
+    caption: item.dataset.caption || `Project ${index + 1}`,
+    projectImages: parseImages(item.dataset.projectImages, item.dataset.src),
+    previewImages: parseImages(item.dataset.previewImages, item.dataset.src)
+  })).filter((item) => item.src);
+
+  if (!track || !dotsContainer || sourceItems.length === 0) return;
+
+  const projectsById = new Map(sourceItems.map((item) => [item.id, item]));
+
+  const lightbox = (() => {
+    const overlay = document.createElement('div');
+    overlay.className = 'gallery-lightbox';
+    overlay.innerHTML = `
+      <div class="gallery-lightbox-content" role="dialog" aria-modal="true" aria-label="Project image viewer">
+        <button class="gallery-lightbox-close" aria-label="Close viewer">✕</button>
+        <button class="gallery-lightbox-prev" aria-label="Previous image">❮</button>
+        <img class="gallery-lightbox-image" src="" alt="">
+        <button class="gallery-lightbox-next" aria-label="Next image">❯</button>
+        <p class="gallery-lightbox-caption"></p>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const image = overlay.querySelector('.gallery-lightbox-image');
+    const caption = overlay.querySelector('.gallery-lightbox-caption');
+    const closeBtn = overlay.querySelector('.gallery-lightbox-close');
+    const prevImageBtn = overlay.querySelector('.gallery-lightbox-prev');
+    const nextImageBtn = overlay.querySelector('.gallery-lightbox-next');
+
+    let activeProject = null;
+    let activeIndex = 0;
+
+    function renderImage() {
+      if (!activeProject || !activeProject.projectImages.length) return;
+      const currentSrc = activeProject.projectImages[activeIndex];
+      image.src = currentSrc;
+      image.alt = activeProject.alt;
+      caption.textContent = `${activeProject.caption} (${activeIndex + 1}/${activeProject.projectImages.length})`;
+    }
+
+    function close() {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+      activeProject = null;
+    }
+
+    function open(project, startSrc) {
+      activeProject = project;
+      const startIndex = project.projectImages.findIndex((src) => src === startSrc);
+      activeIndex = startIndex >= 0 ? startIndex : 0;
+      renderImage();
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function nextImage() {
+      if (!activeProject) return;
+      activeIndex = (activeIndex + 1) % activeProject.projectImages.length;
+      renderImage();
+    }
+
+    function prevImage() {
+      if (!activeProject) return;
+      activeIndex = (activeIndex - 1 + activeProject.projectImages.length) % activeProject.projectImages.length;
+      renderImage();
+    }
+
+    closeBtn?.addEventListener('click', close);
+    nextImageBtn?.addEventListener('click', nextImage);
+    prevImageBtn?.addEventListener('click', prevImage);
+
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) close();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (!overlay.classList.contains('show')) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowRight') nextImage();
+      if (event.key === 'ArrowLeft') prevImage();
+    });
+
+    return { open };
+  })();
+
+  const pages = sourceItems.map((project) => {
+    const preview = project.previewImages.length ? [...project.previewImages] : [...project.projectImages];
+    while (preview.length < 3) {
+      preview.push(project.projectImages[preview.length % project.projectImages.length] || project.src);
+    }
+    return {
+      project,
+      preview: preview.slice(0, 3)
+    };
+  });
+
+  track.innerHTML = pages.map((page) => `
+    <div class="gallery-page">
+      <figure class="gallery-main" data-project-id="${page.project.id}" data-image-src="${page.preview[0]}">
+        <img src="${page.preview[0]}" alt="${page.project.alt}">
+        <figcaption>${page.project.caption}</figcaption>
+      </figure>
+      <div class="gallery-side">
+        <figure class="gallery-small" data-project-id="${page.project.id}" data-image-src="${page.preview[1]}">
+          <img src="${page.preview[1]}" alt="${page.project.alt}">
+          <figcaption>${page.project.caption}</figcaption>
+        </figure>
+        <figure class="gallery-small" data-project-id="${page.project.id}" data-image-src="${page.preview[2]}">
+          <img src="${page.preview[2]}" alt="${page.project.alt}">
+          <figcaption>${page.project.caption}</figcaption>
+        </figure>
+      </div>
+    </div>
+  `).join('');
+
+  track.querySelectorAll('[data-project-id]').forEach((figure) => {
+    figure.addEventListener('click', () => {
+      const projectId = figure.getAttribute('data-project-id');
+      const startSrc = figure.getAttribute('data-image-src');
+      const project = projectsById.get(projectId || '');
+      if (!project) return;
+      lightbox.open(project, startSrc || project.src);
+    });
+  });
+
+  let current = 0;
+  dotsContainer.innerHTML = '';
+  pages.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.setAttribute('aria-label', `Go to gallery slide ${index + 1}`);
+    if (index === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => {
+      current = index;
+      update();
+      resetAutoplay();
+    });
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = Array.from(dotsContainer.querySelectorAll('button'));
+
+  function update() {
+    const offset = current * -100;
+    track.style.transform = `translateX(${offset}%)`;
+    dots.forEach((dot) => dot.classList.remove('active'));
+    dots[current]?.classList.add('active');
+  }
+
+  function next() {
+    current = (current + 1) % pages.length;
+    update();
+  }
+
+  function prev() {
+    current = (current - 1 + pages.length) % pages.length;
+    update();
+  }
+
+  prevBtn?.addEventListener('click', () => {
+    prev();
+    stopAutoplay();
+  });
+  nextBtn?.addEventListener('click', () => {
+    next();
+    stopAutoplay();
+  });
+
+  const autoplayDelay = 9000;
+  let autoplay = setInterval(next, autoplayDelay);
+  let autoplayStoppedByUser = false;
+
+  function stopAutoplay() {
+    autoplayStoppedByUser = true;
+    clearInterval(autoplay);
+  }
+
+  function resetAutoplay() {
+    if (autoplayStoppedByUser) return;
+    clearInterval(autoplay);
+    autoplay = setInterval(next, autoplayDelay);
+  }
+
+  const desktopHoverMedia = window.matchMedia('(min-width: 1000px) and (hover: hover) and (pointer: fine)');
+
+  slider.addEventListener('mouseenter', () => {
+    if (!desktopHoverMedia.matches) return;
+    if (autoplayStoppedByUser) return;
+    clearInterval(autoplay);
+  });
+
+  slider.addEventListener('mouseleave', () => {
+    if (!desktopHoverMedia.matches) return;
+    if (autoplayStoppedByUser) return;
+    autoplay = setInterval(next, autoplayDelay);
+  });
+
+  update();
+})();
+
+/* === REVIEWS AUTO-SCROLL === */
+(function() {
+  const container = document.querySelector('.reviews-container');
+  if (!container) return;
+  
+  let offset = 0;
+  function scroll() {
+    offset += 320;
+    if (offset > container.scrollWidth - container.clientWidth) offset = 0;
+    container.scrollTo({ left: offset, behavior: 'smooth' });
+  }
+
+  let interval = setInterval(scroll, 4500);
+  container.addEventListener('mouseenter', () => clearInterval(interval));
+  container.addEventListener('mouseleave', () => interval = setInterval(scroll, 4500));
+})();
+
+/* === MOBILE NAVIGATION === */
+(function() {
+  const toggle = document.querySelector('.nav-toggle');
+  const menu = document.querySelector('.nav-menu');
+  if (toggle && menu) {
+    const closeMenu = () => {
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.setAttribute('aria-expanded', 'false');
+
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!menu.classList.contains('open')) return;
+      const clickInsideMenu = menu.contains(event.target);
+      const clickOnToggle = toggle.contains(event.target);
+      if (!clickInsideMenu && !clickOnToggle) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    });
+  }
+})();
+
+/* === HEADER SCROLL EFFECT === */
+(function() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+})();
+
+/* === BOOKING FORM === */
+(function() {
+  const form = document.getElementById('booking-form');
+  if (!form) return;
+
+  const emailjsConfig = window.EMAILJS_CONFIG || {};
+  const emailjsReady =
+    typeof emailjs !== 'undefined' &&
+    emailjsConfig.publicKey &&
+    emailjsConfig.publicKey !== 'YOUR_PUBLIC_KEY' &&
+    emailjsConfig.serviceId &&
+    emailjsConfig.serviceId !== 'YOUR_SERVICE_ID' &&
+    emailjsConfig.templateId &&
+    emailjsConfig.templateId !== 'YOUR_TEMPLATE_ID';
+
+  if (emailjsReady) {
+    emailjs.init({ publicKey: emailjsConfig.publicKey });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msgEl = document.getElementById('message');
+    msgEl.textContent = '';
+    msgEl.classList.remove('show', 'success', 'error');
+
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    try {
+      if (!emailjsReady) {
+        throw new Error('Email service is not configured yet. Add your EmailJS keys in index.html.');
+      }
+
+      const templateParams = {
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        service: data.service || '',
+        date: data.date || '',
+        time: data.time || '',
+        address: data.address || '',
+        notes: data.notes || '',
+        to_email: emailjsConfig.toEmail || ''
+      };
+
+      await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams);
+
+      msgEl.textContent = '✓ Booking requested! We\'ll confirm within 24 hours.';
+      msgEl.classList.add('show', 'success');
+      form.reset();
+    } catch (err) {
+      msgEl.textContent = '✗ Error: ' + err.message;
+      msgEl.classList.add('show', 'error');
+    }
+  });
+})();
+
+
+/* === SCROLL-TO-TOP BUTTON === */
+(function() {
+  const btn = document.getElementById('scroll-top');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();

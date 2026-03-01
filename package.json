@@ -1,0 +1,16 @@
+{
+  "name": "greenworks-landscaping",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:css": "sass styles/style.scss styles.css && sass styles/style.scss styles.min.css --compressed",
+    "watch:css": "sass --watch styles:. --watch styles/style.scss:styles.css"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "sass": "^1.69.5"
+  }
+}

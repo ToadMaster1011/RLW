@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RIGO'S Landscaping — Book Online</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-social">
+          <a href="https://facebook.com" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="tel:+17086778212" class="phone-btn" title="Call us"><i class="fas fa-phone"></i></a>
+        </div>
+        <a class="brand" href="/">
+          <img src="logo.jpg" alt="Rigo's Landscaping logo" class="site-logo">
+          <div class="brand-text">
+            <strong>Rigo's Landscaping</strong>
+            <small>Professional Landscaping</small>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <button class="nav-toggle" aria-label="Toggle navigation"><span class="hamburger"></span></button>
+          <div class="nav-menu">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#gallery">Portfolio</a>
+            <a href="#booking" class="nav-cta">Get Started</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="gallery" class="section gallery">
+        <div class="gallery-shell">
+          <div class="gallery-intro">
+            <p class="gallery-kicker">Our Work</p>
+            <h2>Recent Yard Transformations</h2>
+            <p class="gallery-lead">A look at real projects completed by our team, from cleanup and maintenance to full landscape refreshes.</p>
+          </div>
+          <div class="gallery-premium" id="gallery-slider">
+            <button class="gallery-nav prev" aria-label="Previous project images">❮</button>
+            <div class="gallery-viewport">
+              <div class="gallery-track"></div>
+            </div>
+            <button class="gallery-nav next" aria-label="Next project images">❯</button>
+            <div class="gallery-dots"></div>
+
+            <ul class="gallery-source" aria-hidden="true">
+              <li data-project-id="project-1" data-src="images/IMG-20260228-WA0143.jpg" data-alt="Project 1 " data-caption="lawn and cleanup progress" data-preview-images="images/IMG-20260228-WA0143.jpg|images\IMG-20260228-WA0237.jpg|images/IMG-20260228-WA0233.jpg|images\IMG-20260228-WA0239.jpg" data-project-images="images/IMG-20260228-WA0143.jpg|images/IMG-20260228-WA0237.jpg|images/IMG-20260228-WA0233.jpg|images\IMG-20260228-WA0231.jpg|images\IMG-20260228-WA0226.jpg|images\IMG-20260228-WA0221.jpg|images\IMG-20260228-WA0133.jpg|"></li>
+              <li data-project-id="project-2" data-src="images\IMG-20260228-WA0124.jpg" data-alt="Project 2 " data-caption="Transformation" data-preview-images="images\IMG-20260228-WA0124.jpg|images\IMG-20260228-WA0159.jpg|images\IMG-20260228-WA0203.jpg" data-project-images="images\IMG-20260228-WA0124.jpg|images\IMG-20260228-WA0159.jpg|images\IMG-20260228-WA0203.jpg|images\IMG-20260228-WA0144.jpg|images\IMG-20260228-WA0202.jpg"></li>
+              <li data-project-id="project-3" data-src="images\IMG-20260228-WA0135.jpg" data-alt="Project 3 " data-caption="Project 3" data-preview-images="images\IMG-20260228-WA0135.jpg|images\IMG-20260228-WA0186.jpg" data-project-images="images\IMG-20260228-WA0135.jpg|images\IMG-20260228-WA0186.jpg"></li>
+              <li data-project-id="project-4" data-src="images/IMG-20260228-WA0184.jpg" data-alt="Project 4 " data-caption="Project 4" data-preview-images="images/IMG-20260228-WA0184.jpg|images/IMG-20260228-WA0185.jpg|images/IMG-20260228-WA0186.jpg" data-project-images="images/IMG-20260228-WA0184.jpg|images/IMG-20260228-WA0185.jpg|images/IMG-20260228-WA0186.jpg|images/IMG-20260228-WA0189.jpg"></li>
+              <li data-project-id="project-5" data-src="images/IMG-20260228-WA0201.jpg" data-alt="Project 5 " data-caption="Project 5" data-preview-images="images/IMG-20260228-WA0201.jpg|images/IMG-20260228-WA0202.jpg|images/IMG-20260228-WA0203.jpg" data-project-images="images/IMG-20260228-WA0201.jpg|images/IMG-20260228-WA0202.jpg|images/IMG-20260228-WA0203.jpg|images/IMG-20260228-WA0204.jpg"></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stats">
+        <div class="container stats-grid">
+          <div class="stat">
+            <div class="number">3000+</div>
+            <div class="label">Lawns Maintained</div>
+          </div>
+          <div class="stat">
+            <div class="number">2500+</div>
+            <div class="label">Projects Completed</div>
+          </div>
+          <div class="stat">
+            <div class="number">6+</div>
+            <div class="label">Years in Business</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="section services">
+        <div class="container">
+          <h2>How We Can Help</h2>
+          <div class="cards">
+            <article class="card">
+              <div class="icon">🏡</div>
+              <h3>Residential</h3>
+              <p>Complete yard care and landscape maintenance for homes.</p>
+            </article>
+            <article class="card">
+              <div class="icon">🌳</div>
+      
+              <h3>Commercial</h3>
+              <p>Reliable property maintenance and landscape services for businesses.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section about">
+        <div class="container">
+          <h2>Welcome to Rigo's Landscaping</h2>
+          <p>We’re a family-owned local team that believes good work should be straightforward: show up on time, do the job right, and treat your property with care.</p>
+          <p>For over 6+ years, we’ve built our business through word of mouth by being reliable, communicating clearly, and standing behind what we do.</p>
+        </div>
+      </section>
+
+      <section class="section reviews">
+        <div class="container">
+          <h2>What Neighbors Are Saying</h2>
+          <div class="reviews-container" id="reviews-track">
+            <blockquote class="review"> <p>"Fast, friendly and did a beautiful job on our lawn. Highly recommend!"</p><cite>— Sarah L.</cite></blockquote>
+            <blockquote class="review"> <p>"They transformed our yard quickly and the results were even better than we expected."</p><cite>— Michael D.</cite></blockquote>
+            <blockquote class="review"> <p>"Professional design work and quick installation. Our backyard looks amazing."</p><cite>— Priya K.</cite></blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section id="booking" class="section booking">
+        <div class="container booking-grid">
+          <div class="booking-info">
+            <p class="booking-kicker">Easy Booking</p>
+            <h2>Ready for a yard you'll love coming home to?</h2>
+            <p class="booking-subtext">Share a few details and we’ll help you get started quickly. We confirm within 24 hours.</p>
+            <ul class="benefits">
+              <li>
+                <span class="benefit-check">✓</span>
+                <div>
+                  <strong>Free consultation</strong>
+                  <small>No-pressure walkthrough and clear recommendations.</small>
+                </div>
+              </li>
+              <li>
+                <span class="benefit-check">✓</span>
+                <div>
+                  <strong>Transparent pricing</strong>
+                  <small>Upfront quotes with no surprise add-ons.</small>
+                </div>
+              </li>
+              <li>
+                <span class="benefit-check">✓</span>
+                <div>
+                  <strong>Same-day booking</strong>
+                  <small>Fast scheduling when availability opens.</small>
+                </div>
+              </li>
+            </ul>
+            <p class="booking-note">We keep it simple: clear communication, reliable timing, and work we stand behind.</p>
+          </div>
+          <form id="booking-form" class="booking-form">
+            <p class="booking-form-title">Tell us about your project</p>
+            <div class="row">
+              <input type="text" name="name" placeholder="Full Name" required>
+              <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="row">
+              <input type="tel" name="phone" placeholder="Phone">
+              <select name="service" required>
+                <option value="">Select Service</option>
+                <option value="lawn">Lawn Mowing</option>
+                <option value="landscaping">Landscaping</option>
+              </select>
+            </div>
+            <div class="row">
+              <input type="date" name="date" required>
+              <input type="time" name="time" placeholder="Preferred Time">
+            </div>
+            <input type="text" name="address" placeholder="Street Address" required>
+            <textarea name="notes" rows="3" placeholder="Special instructions (optional)"></textarea>
+            <button type="submit" class="btn primary large">Send Request</button>
+            <p class="booking-form-meta">Your information stays private and is only used to contact you about your booking.</p>
+            <div id="message" role="status" aria-live="polite" class="form-message"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="copyright">&copy; <span id="year"></span> Rigo's Landscaping. All rights reserved.</div>
+        <div class="social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <a href="#booking" class="sticky-cta"><i class="fa fa-calendar-alt"></i> Let’s Book</a>
+    <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+      window.EMAILJS_CONFIG = {
+        publicKey: 'YOUR_PUBLIC_KEY',
+        serviceId: 'YOUR_SERVICE_ID',
+        templateId: 'YOUR_TEMPLATE_ID',
+        toEmail: 'YOUR_DESTINATION_EMAIL'
+      };
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

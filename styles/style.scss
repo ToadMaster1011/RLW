@@ -1,0 +1,20 @@
+// Main SCSS entry point
+// Compile this file to styles.css
+
+// Variables & Functions
+@import 'variables';
+
+// Mixins & Helper Functions
+@import 'mixins';
+
+// Typography
+@import 'typography';
+
+// Layout & Sections
+@import 'layout';
+
+// Components
+@import 'components';
+
+// Utilities & Animations
+@import 'utilities';

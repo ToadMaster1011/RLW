@@ -1,0 +1,148 @@
+// Global typography
+html {
+  font-family: $font-sans;
+  font-size: 16px;
+  line-height: 1.4;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: color('bg');
+  color: color('ink');
+  font-weight: $font-weight-normal;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-serif;
+  color: color('primary-dark');
+  line-height: 1.2;
+  margin-bottom: $space-md;
+  font-weight: $font-weight-bold;
+}
+
+h1 {
+  font-size: $font-size-4xl;
+  letter-spacing: -0.02em;
+  
+  @include bp-md {
+    font-size: $font-size-3xl;
+  }
+}
+
+h2 {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  position: relative;
+  padding-bottom: $space-lg;
+  text-align: center;
+  
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, color('primary-light'), color('primary'));
+    border-radius: 2px;
+  }
+  
+  @include bp-md {
+    font-size: $font-size-2xl;
+  }
+}
+
+h3 {
+  font-size: $font-size-xl;
+  
+  @include bp-md {
+    font-size: $font-size-lg;
+  }
+}
+
+h4 {
+  font-size: $font-size-lg;
+}
+
+h5, h6 {
+  font-size: $font-size-base;
+}
+
+// Paragraphs
+p {
+  margin-bottom: $space-md;
+  color: color('muted');
+  line-height: 1.6;
+}
+
+// Links
+a {
+  color: color('primary');
+  @include transition(color);
+  
+  &:hover {
+    color: color('primary-dark');
+  }
+}
+
+// Strong & emphasis
+strong {
+  font-weight: $font-weight-bold;
+  color: color('ink');
+}
+
+em {
+  font-style: italic;
+}
+
+// Lists
+ul, ol {
+  margin-bottom: $space-md;
+  padding-left: $space-lg;
+}
+
+li {
+  margin-bottom: $space-sm;
+}
+
+blockquote {
+  border-left: 4px solid color('primary-light');
+  padding-left: $space-lg;
+  margin: $space-lg 0;
+  color: color('muted');
+  font-style: italic;
+}
+
+// Code
+code {
+  background: color('surface');
+  padding: 0.2em 0.4em;
+  border-radius: $radius-sm;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background: color('surface');
+  padding: $space-lg;
+  border-radius: $radius-md;
+  overflow-x: auto;
+  margin-bottom: $space-lg;
+  
+  code {
+    background: none;
+    padding: 0;
+  }
+}
+
+// Horizontal rule
+hr {
+  border: none;
+  border-top: 1px solid rgba(color('ink'), 0.1);
+  margin: $space-2xl 0;
+}
