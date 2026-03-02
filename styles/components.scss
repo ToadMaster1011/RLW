@@ -517,12 +517,14 @@
 .booking-modal-dialog {
   position: relative;
   width: min(760px, 100%);
+  max-height: min(92vh, 920px);
   background: linear-gradient(180deg, rgba(color('bg'), 0.65) 0%, #fff 140px);
   border: 1px solid rgba(color('primary-dark'), 0.18);
   border-radius: $radius-xl;
   box-shadow: $shadow-2xl;
   padding: clamp(1rem, 2.2vw, 1.5rem);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   &::before {
     content: '';

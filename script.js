@@ -392,7 +392,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const continueBtn = document.getElementById('booking-date-continue');
   const backBtn = document.getElementById('booking-back-to-calendar');
   const calendarInput = document.getElementById('booking-modal-date');
-  const calendarEl = document.getElementById('booking-calendar');
   const calendarGrid = document.getElementById('booking-calendar-grid');
   const calendarMonthLabel = document.getElementById('booking-calendar-month');
   const calendarPrevBtn = document.getElementById('booking-calendar-prev');
@@ -404,7 +403,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const modalFormDate = document.getElementById('booking-modal-form-date');
   const modalSubmittedAt = document.getElementById('booking-modal-submitted-at');
 
-  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !calendarEl || !calendarGrid || !calendarMonthLabel || !calendarPrevBtn || !calendarNextBtn || !selectedDateText || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
+  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !calendarGrid || !calendarMonthLabel || !calendarPrevBtn || !calendarNextBtn || !selectedDateText || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
     return;
   }
 
@@ -502,6 +501,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
 
   function showFormStep() {
+    if (!modalFormDate.value && calendarInput.value) {
+      modalFormDate.value = calendarInput.value;
+    }
     stepCalendar.hidden = true;
     stepForm.hidden = false;
   }
@@ -512,10 +514,14 @@ document.getElementById('year').textContent = new Date().getFullYear();
       selectedDate = todayYmd;
     }
     calendarInput.value = selectedDate;
+    modalFormDate.value = selectedDate;
     visibleMonth = parseYMD(selectedDate);
     visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
     updateSelectedDateText();
     renderCalendar();
+
+    modalMessage.textContent = '';
+    modalMessage.classList.remove('show', 'success', 'error');
 
     showCalendarStep();
     modal.classList.add('show');
@@ -581,6 +587,14 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
     if (!modalFormDate.value && calendarInput.value) {
       modalFormDate.value = calendarInput.value;
+    }
+
+    if (!modalFormDate.value) {
+      modalMessage.textContent = '✗ Please pick a booking date first.';
+      modalMessage.classList.remove('success');
+      modalMessage.classList.add('show', 'error');
+      showCalendarStep();
+      return;
     }
 
     modalSubmittedAt.value = new Date().toISOString();
