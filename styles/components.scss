@@ -18,6 +18,14 @@
   &:focus {
     @include focus-ring;
   }
+
+  &:disabled,
+  &[aria-busy='true'] {
+    opacity: 0.72;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: $shadow-sm;
+  }
   
   &.primary {
     @include gradient(color('primary-light'), color('primary-dark'));
@@ -786,6 +794,14 @@
       background: rgba(color('bg'), 0.8);
       border-color: rgba(color('primary-dark'), 0.35);
     }
+  }
+
+  .btn:disabled,
+  .btn[aria-busy='true'] {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: $shadow-sm;
   }
 }
 

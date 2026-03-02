@@ -375,9 +375,26 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const mainForm = document.getElementById('booking-form');
   const mainMessage = document.getElementById('message');
   if (mainForm && mainMessage) {
+    const mainSubmitBtn = mainForm.querySelector('button[type="submit"]');
+
     mainForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (mainSubmitBtn) {
+        mainSubmitBtn.disabled = true;
+        mainSubmitBtn.setAttribute('aria-busy', 'true');
+        mainSubmitBtn.dataset.originalText = mainSubmitBtn.textContent || 'Send Request';
+        mainSubmitBtn.textContent = 'Sending...';
+      }
+
       const ok = await submitBooking(mainForm, mainMessage);
+
+      if (mainSubmitBtn) {
+        mainSubmitBtn.disabled = false;
+        mainSubmitBtn.removeAttribute('aria-busy');
+        mainSubmitBtn.textContent = mainSubmitBtn.dataset.originalText || 'Send Request';
+      }
+
       if (ok) {
         mainForm.reset();
       }
@@ -402,8 +419,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const modalMessage = document.getElementById('booking-modal-message');
   const modalFormDate = document.getElementById('booking-modal-form-date');
   const modalSubmittedAt = document.getElementById('booking-modal-submitted-at');
+  const modalSubmitBtn = modalForm?.querySelector('button[type="submit"]');
 
-  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !calendarGrid || !calendarMonthLabel || !calendarPrevBtn || !calendarNextBtn || !selectedDateText || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
+  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !calendarGrid || !calendarMonthLabel || !calendarPrevBtn || !calendarNextBtn || !selectedDateText || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt || !modalSubmitBtn) {
     return;
   }
 
@@ -598,7 +616,16 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
 
     modalSubmittedAt.value = new Date().toISOString();
+    const originalSubmitText = modalSubmitBtn.textContent;
+    modalSubmitBtn.disabled = true;
+    modalSubmitBtn.setAttribute('aria-busy', 'true');
+    modalSubmitBtn.textContent = 'Sending...';
+
     const ok = await submitBooking(modalForm, modalMessage);
+
+    modalSubmitBtn.disabled = false;
+    modalSubmitBtn.removeAttribute('aria-busy');
+    modalSubmitBtn.textContent = originalSubmitText;
 
     if (ok) {
       modalForm.reset();
