@@ -900,12 +900,12 @@
   gap: 0.85rem;
   align-items: center;
   justify-content: center;
-  width: clamp(340px, 38vw, 500px);
-  min-width: 340px;
+  width: clamp(300px, 34vw, 420px);
+  min-width: 300px;
   
   .site-logo {
-    width: 96px;
-    height: 96px;
+    width: 84px;
+    height: 84px;
     object-fit: cover;
     border-radius: $radius-md;
     border: 1px solid rgba(0, 0, 0, 0.06);
@@ -915,42 +915,14 @@
     strong {
       display: block;
       font-family: $font-serif;
-      font-size: 1.24rem;
+      font-size: 1.12rem;
     }
     
     small {
       display: block;
       color: color('muted');
-      font-size: 0.94rem;
+      font-size: 0.86rem;
     }
-  }
-}
-
-@media (min-width: 1025px) {
-  .site-header {
-    .header-inner {
-      position: relative;
-      padding-right: 11.5rem;
-    }
-  }
-
-  .header-social {
-    position: absolute;
-    top: 50%;
-    right: 0.9rem;
-    transform: translateY(-50%);
-    gap: 0.5rem;
-
-    a {
-      width: 40px;
-      height: 40px;
-      font-size: 1rem;
-    }
-  }
-
-  .main-nav {
-    margin-left: auto;
-    margin-right: 1rem;
   }
 }
 
@@ -1075,6 +1047,7 @@
 @media (max-width: 1024px) {
   .site-header {
     .header-inner {
+      position: relative;
       display: grid;
       grid-template-columns: 1fr;
       grid-template-areas:
@@ -1083,41 +1056,46 @@
         'nav';
       justify-items: center;
       row-gap: 0.4rem;
-      padding: 0.5rem 0;
+      padding: 0.65rem 0;
+      padding-right: 9.75rem;
     }
   }
 
   .brand {
-    flex-direction: column;
-    text-align: center;
-    width: auto;
-    min-width: 0;
-    gap: 0.5rem;
+    flex-direction: row;
+    text-align: left;
+    width: clamp(340px, 55vw, 500px);
+    min-width: 340px;
+    gap: 0.75rem;
 
     .site-logo {
-      width: 56px;
-      height: 56px;
+      width: 92px;
+      height: 92px;
     }
 
     .brand-text {
       strong {
-        font-size: 0.92rem;
+        font-size: 1.2rem;
       }
 
       small {
-        font-size: 0.72rem;
+        font-size: 0.92rem;
       }
     }
   }
 
   .header-social {
-    justify-content: center;
-    gap: 0.45rem;
+    position: absolute;
+    top: 50%;
+    right: 0.85rem;
+    transform: translateY(-50%);
+    justify-content: flex-end;
+    gap: 0.5rem;
 
     a {
-      width: 34px;
-      height: 34px;
-      font-size: 0.85rem;
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
     }
   }
 
