@@ -479,6 +479,9 @@
   padding: $space-md $space-lg;
   border-radius: $radius-full;
   box-shadow: $shadow-lg;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
   text-decoration: none;
   @include flex(row);
   gap: $space-sm;
@@ -488,6 +491,128 @@
   &:hover {
     transform: scale(1.05);
     box-shadow: $shadow-xl;
+  }
+}
+
+.booking-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(color('ink'), 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: $space-md;
+  z-index: 1200;
+
+  &.show {
+    display: flex;
+  }
+}
+
+.booking-modal-dialog {
+  position: relative;
+  width: min(720px, 100%);
+  background: linear-gradient(165deg, rgba(color('primary'), 0.08), rgba(255, 255, 255, 0.96));
+  border: 1px solid rgba(color('primary'), 0.18);
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+  padding: 1.25rem;
+}
+
+.booking-modal-close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.95);
+  color: color('primary-dark');
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: $shadow-sm;
+}
+
+.booking-modal-step {
+  h3 {
+    margin-bottom: 0.45rem;
+    color: color('primary-dark');
+    text-align: left;
+    padding-bottom: 0;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.booking-modal-kicker {
+  margin-bottom: 0.35rem;
+  font-size: $font-size-xs;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: $font-weight-bold;
+  color: color('primary-dark');
+}
+
+.booking-modal-subtext,
+.booking-modal-now {
+  margin-bottom: 0.8rem;
+  color: color('muted');
+}
+
+.booking-modal-now strong {
+  color: color('ink');
+}
+
+.booking-modal-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: $font-weight-semibold;
+  color: color('ink');
+}
+
+.booking-modal-date-input {
+  width: 100%;
+  margin-bottom: 0.85rem;
+  padding: 0.75rem;
+  border-radius: $radius-sm;
+  border: 1px solid rgba(color('primary'), 0.2);
+  font-family: inherit;
+  font-size: $font-size-base;
+}
+
+.booking-form-modal {
+  margin-top: 0.4rem;
+}
+
+.booking-modal-actions {
+  @include flex(row, $space-sm);
+  justify-content: flex-end;
+
+  .btn {
+    width: auto;
+  }
+}
+
+@include bp-md {
+  .booking-modal-dialog {
+    padding: 1rem;
+  }
+
+  .booking-modal-actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+@include bp-sm {
+  .booking-modal {
+    padding: 0.75rem;
   }
 }
 

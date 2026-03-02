@@ -297,11 +297,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
   });
 })();
 
-/* === BOOKING FORM === */
+/* === BOOKING FORMS & POPUP === */
 (function() {
-  const form = document.getElementById('booking-form');
-  if (!form) return;
-
   const emailjsConfig = window.EMAILJS_CONFIG || {};
   const emailjsReady =
     typeof emailjs !== 'undefined' &&
@@ -316,9 +313,24 @@ document.getElementById('year').textContent = new Date().getFullYear();
     emailjs.init({ publicKey: emailjsConfig.publicKey });
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msgEl = document.getElementById('message');
+  const formatDateTime = (date) => date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  });
+
+  const toLocalYMD = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  async function submitBooking(form, msgEl) {
+    if (!form || !msgEl) return false;
+
     msgEl.textContent = '';
     msgEl.classList.remove('show', 'success', 'error');
 
@@ -335,6 +347,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
           time: data.time || '',
           address: data.address || '',
           notes: data.notes || '',
+          submittedAt: data.submittedAt || '',
           to_email: emailjsConfig.toEmail || ''
         };
 
@@ -356,10 +369,133 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
       msgEl.textContent = '✓ Booking requested! We\'ll confirm within 24 hours.';
       msgEl.classList.add('show', 'success');
-      form.reset();
+      return true;
     } catch (err) {
       msgEl.textContent = '✗ Error: ' + err.message;
       msgEl.classList.add('show', 'error');
+      return false;
+    }
+  }
+
+  const mainForm = document.getElementById('booking-form');
+  const mainMessage = document.getElementById('message');
+  if (mainForm && mainMessage) {
+    mainForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ok = await submitBooking(mainForm, mainMessage);
+      if (ok) {
+        mainForm.reset();
+      }
+    });
+  }
+
+  const openModalBtn = document.getElementById('open-booking-modal');
+  const modal = document.getElementById('booking-modal');
+  const closeModalBtn = document.getElementById('booking-modal-close');
+  const stepCalendar = document.getElementById('booking-step-calendar');
+  const stepForm = document.getElementById('booking-step-form');
+  const continueBtn = document.getElementById('booking-date-continue');
+  const backBtn = document.getElementById('booking-back-to-calendar');
+  const calendarInput = document.getElementById('booking-modal-date');
+  const currentDateTime = document.getElementById('booking-current-datetime');
+  const modalForm = document.getElementById('booking-modal-form');
+  const modalMessage = document.getElementById('booking-modal-message');
+  const modalFormDate = document.getElementById('booking-modal-form-date');
+  const modalSubmittedAt = document.getElementById('booking-modal-submitted-at');
+
+  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
+    return;
+  }
+
+  let clockTimer = null;
+
+  function updateNowText() {
+    currentDateTime.textContent = formatDateTime(new Date());
+  }
+
+  function showCalendarStep() {
+    stepCalendar.hidden = false;
+    stepForm.hidden = true;
+  }
+
+  function showFormStep() {
+    stepCalendar.hidden = true;
+    stepForm.hidden = false;
+  }
+
+  function openModal() {
+    const today = toLocalYMD(new Date());
+    calendarInput.min = today;
+    if (!calendarInput.value) {
+      calendarInput.value = today;
+    }
+
+    showCalendarStep();
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    updateNowText();
+    clearInterval(clockTimer);
+    clockTimer = setInterval(updateNowText, 1000);
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    clearInterval(clockTimer);
+    clockTimer = null;
+  }
+
+  openModalBtn.addEventListener('click', openModal);
+  closeModalBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  continueBtn.addEventListener('click', () => {
+    if (!calendarInput.value) {
+      calendarInput.reportValidity();
+      return;
+    }
+
+    modalFormDate.value = calendarInput.value;
+    showFormStep();
+    modalForm.querySelector('input[name="name"]')?.focus();
+  });
+
+  backBtn.addEventListener('click', () => {
+    showCalendarStep();
+    calendarInput.focus();
+  });
+
+  modalForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!modalFormDate.value && calendarInput.value) {
+      modalFormDate.value = calendarInput.value;
+    }
+
+    modalSubmittedAt.value = new Date().toISOString();
+    const ok = await submitBooking(modalForm, modalMessage);
+
+    if (ok) {
+      modalForm.reset();
+      modalFormDate.value = '';
+      setTimeout(() => {
+        closeModal();
+        showCalendarStep();
+      }, 1100);
     }
   });
 })();

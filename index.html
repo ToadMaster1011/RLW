@@ -195,7 +195,56 @@
       </div>
     </footer>
 
-    <a href="#booking" class="sticky-cta"><i class="fa fa-calendar-alt"></i> Let’s Book</a>
+    <button type="button" id="open-booking-modal" class="sticky-cta" aria-haspopup="dialog" aria-controls="booking-modal"><i class="fa fa-calendar-alt"></i> Let’s Book</button>
+
+    <div id="booking-modal" class="booking-modal" aria-hidden="true">
+      <div class="booking-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+        <button type="button" class="booking-modal-close" id="booking-modal-close" aria-label="Close booking window">✕</button>
+
+        <div class="booking-modal-step" id="booking-step-calendar">
+          <p class="booking-modal-kicker">Step 1 of 2</p>
+          <h3 id="booking-modal-title">Pick a Day</h3>
+          <p class="booking-modal-subtext">Select a date to continue to the booking form.</p>
+          <p class="booking-modal-now">Current date &amp; time: <strong id="booking-current-datetime"></strong></p>
+          <label for="booking-modal-date" class="booking-modal-label">Date</label>
+          <input type="date" id="booking-modal-date" class="booking-modal-date-input" required>
+          <button type="button" class="btn primary" id="booking-date-continue">Continue to Form</button>
+        </div>
+
+        <div class="booking-modal-step" id="booking-step-form" hidden>
+          <p class="booking-modal-kicker">Step 2 of 2</p>
+          <h3>Complete Your Booking Request</h3>
+          <form id="booking-modal-form" class="booking-form booking-form-modal">
+            <p class="booking-form-title">Tell us about your project</p>
+            <div class="row">
+              <input type="text" name="name" placeholder="Full Name" required>
+              <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="row">
+              <input type="tel" name="phone" placeholder="Phone">
+              <select name="service" required>
+                <option value="">Select Service</option>
+                <option value="lawn">Lawn Mowing</option>
+                <option value="landscaping">Landscaping</option>
+              </select>
+            </div>
+            <div class="row">
+              <input type="date" name="date" id="booking-modal-form-date" readonly required>
+              <input type="time" name="time" placeholder="Preferred Time">
+            </div>
+            <input type="text" name="address" placeholder="Street Address" required>
+            <textarea name="notes" rows="3" placeholder="Special instructions (optional)"></textarea>
+            <input type="hidden" name="submittedAt" id="booking-modal-submitted-at">
+            <div class="booking-modal-actions">
+              <button type="button" class="btn" id="booking-back-to-calendar">Back</button>
+              <button type="submit" class="btn primary">Send Request</button>
+            </div>
+            <p class="booking-form-meta">Selected date is auto-filled. Submission time is recorded automatically.</p>
+            <div id="booking-modal-message" role="status" aria-live="polite" class="form-message"></div>
+          </form>
+        </div>
+      </div>
+    </div>
     <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
 
     <script>
