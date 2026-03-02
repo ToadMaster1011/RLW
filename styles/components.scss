@@ -512,7 +512,7 @@
 .booking-modal-dialog {
   position: relative;
   width: min(720px, 100%);
-  background: linear-gradient(165deg, rgba(color('primary'), 0.08), rgba(255, 255, 255, 0.96));
+  background: #fff;
   border: 1px solid rgba(color('primary'), 0.18);
   border-radius: $radius-lg;
   box-shadow: $shadow-xl;
@@ -573,14 +573,92 @@
   color: color('ink');
 }
 
-.booking-modal-date-input {
-  width: 100%;
-  margin-bottom: 0.85rem;
+.booking-calendar {
+  background: #fff;
+  border: 1px solid rgba(color('primary'), 0.18);
+  border-radius: $radius-md;
   padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.booking-calendar-header {
+  @include flex(row, $space-sm);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.booking-calendar-month {
+  margin: 0;
+  font-weight: $font-weight-bold;
+  color: color('primary-dark');
+}
+
+.booking-calendar-nav {
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-full;
+  border: 1px solid rgba(color('primary'), 0.22);
+  background: #fff;
+  color: color('primary-dark');
+  cursor: pointer;
+}
+
+.booking-calendar-weekdays,
+.booking-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.booking-calendar-weekdays {
+  margin-bottom: 0.4rem;
+
+  span {
+    text-align: center;
+    font-size: $font-size-xs;
+    color: color('muted');
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.booking-calendar-empty {
+  min-height: 34px;
+}
+
+.booking-calendar-day {
+  min-height: 34px;
+  border: 1px solid rgba(color('primary'), 0.14);
   border-radius: $radius-sm;
-  border: 1px solid rgba(color('primary'), 0.2);
-  font-family: inherit;
-  font-size: $font-size-base;
+  background: #fff;
+  color: color('ink');
+  font-size: $font-size-sm;
+  cursor: pointer;
+
+  &.is-today {
+    border-color: rgba(color('primary'), 0.5);
+    font-weight: $font-weight-bold;
+  }
+
+  &.is-selected {
+    background: color('primary-dark');
+    color: #fff;
+    border-color: color('primary-dark');
+  }
+
+  &.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.booking-calendar-selected {
+  margin-bottom: 0.85rem;
+  color: color('muted');
+}
+
+.booking-calendar-selected strong {
+  color: color('ink');
 }
 
 .booking-form-modal {

@@ -405,17 +405,105 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const continueBtn = document.getElementById('booking-date-continue');
   const backBtn = document.getElementById('booking-back-to-calendar');
   const calendarInput = document.getElementById('booking-modal-date');
+  const calendarEl = document.getElementById('booking-calendar');
+  const calendarGrid = document.getElementById('booking-calendar-grid');
+  const calendarMonthLabel = document.getElementById('booking-calendar-month');
+  const calendarPrevBtn = document.getElementById('booking-calendar-prev');
+  const calendarNextBtn = document.getElementById('booking-calendar-next');
+  const selectedDateText = document.getElementById('booking-selected-date-text');
   const currentDateTime = document.getElementById('booking-current-datetime');
   const modalForm = document.getElementById('booking-modal-form');
   const modalMessage = document.getElementById('booking-modal-message');
   const modalFormDate = document.getElementById('booking-modal-form-date');
   const modalSubmittedAt = document.getElementById('booking-modal-submitted-at');
 
-  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
+  if (!openModalBtn || !modal || !closeModalBtn || !stepCalendar || !stepForm || !continueBtn || !backBtn || !calendarInput || !calendarEl || !calendarGrid || !calendarMonthLabel || !calendarPrevBtn || !calendarNextBtn || !selectedDateText || !currentDateTime || !modalForm || !modalMessage || !modalFormDate || !modalSubmittedAt) {
     return;
   }
 
   let clockTimer = null;
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  let selectedDate = '';
+  let visibleMonth = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1);
+
+  function formatYMD(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  function formatLongDate(date) {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  function parseYMD(ymd) {
+    const [year, month, day] = ymd.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  function updateSelectedDateText() {
+    if (!selectedDate) {
+      selectedDateText.textContent = 'Not selected';
+      return;
+    }
+    selectedDateText.textContent = formatLongDate(parseYMD(selectedDate));
+  }
+
+  function renderCalendar() {
+    const monthName = visibleMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    calendarMonthLabel.textContent = monthName;
+
+    const monthStart = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
+    const monthEnd = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0);
+    const leadingBlanks = monthStart.getDay();
+    const daysInMonth = monthEnd.getDate();
+
+    calendarGrid.innerHTML = '';
+
+    for (let i = 0; i < leadingBlanks; i += 1) {
+      const blank = document.createElement('span');
+      blank.className = 'booking-calendar-empty';
+      calendarGrid.appendChild(blank);
+    }
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const date = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), day);
+      const ymd = formatYMD(date);
+      const isPast = date < todayStart;
+      const isSelected = selectedDate === ymd;
+      const isToday = formatYMD(todayStart) === ymd;
+
+      const dayBtn = document.createElement('button');
+      dayBtn.type = 'button';
+      dayBtn.className = 'booking-calendar-day';
+      dayBtn.textContent = String(day);
+      dayBtn.dataset.date = ymd;
+
+      if (isToday) {
+        dayBtn.classList.add('is-today');
+      }
+      if (isSelected) {
+        dayBtn.classList.add('is-selected');
+      }
+      if (isPast) {
+        dayBtn.classList.add('is-disabled');
+        dayBtn.disabled = true;
+      } else {
+        dayBtn.addEventListener('click', () => {
+          selectedDate = ymd;
+          calendarInput.value = ymd;
+          updateSelectedDateText();
+          renderCalendar();
+        });
+      }
+
+      calendarGrid.appendChild(dayBtn);
+    }
+  }
 
   function updateNowText() {
     currentDateTime.textContent = formatDateTime(new Date());
@@ -432,11 +520,15 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
 
   function openModal() {
-    const today = toLocalYMD(new Date());
-    calendarInput.min = today;
-    if (!calendarInput.value) {
-      calendarInput.value = today;
+    const todayYmd = toLocalYMD(new Date());
+    if (!selectedDate || selectedDate < todayYmd) {
+      selectedDate = todayYmd;
     }
+    calendarInput.value = selectedDate;
+    visibleMonth = parseYMD(selectedDate);
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
+    updateSelectedDateText();
+    renderCalendar();
 
     showCalendarStep();
     modal.classList.add('show');
@@ -473,7 +565,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   continueBtn.addEventListener('click', () => {
     if (!calendarInput.value) {
-      calendarInput.reportValidity();
+      selectedDateText.textContent = 'Please select a date';
       return;
     }
 
@@ -484,7 +576,17 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   backBtn.addEventListener('click', () => {
     showCalendarStep();
-    calendarInput.focus();
+    calendarGrid.querySelector('.booking-calendar-day.is-selected')?.focus();
+  });
+
+  calendarPrevBtn.addEventListener('click', () => {
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
+    renderCalendar();
+  });
+
+  calendarNextBtn.addEventListener('click', () => {
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
+    renderCalendar();
   });
 
   modalForm.addEventListener('submit', async (e) => {

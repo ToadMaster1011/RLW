@@ -1099,7 +1099,7 @@ hr {
 .booking-modal-dialog {
   position: relative;
   width: min(720px, 100%);
-  background: linear-gradient(165deg, rgba(47, 133, 90, 0.08), rgba(255, 255, 255, 0.96));
+  background: #fff;
   border: 1px solid rgba(47, 133, 90, 0.18);
   border-radius: 16px;
   box-shadow: var(--shadow-xl);
@@ -1158,14 +1158,93 @@ hr {
   color: var(--ink);
 }
 
-.booking-modal-date-input {
-  width: 100%;
-  margin-bottom: 0.85rem;
+.booking-calendar {
+  background: #fff;
+  border: 1px solid rgba(47, 133, 90, 0.18);
+  border-radius: 12px;
   padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.booking-calendar-header {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.booking-calendar-month {
+  margin: 0;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.booking-calendar-nav {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 133, 90, 0.22);
+  background: #fff;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+
+.booking-calendar-weekdays,
+.booking-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.booking-calendar-weekdays {
+  margin-bottom: 0.4rem;
+}
+
+.booking-calendar-weekdays span {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.booking-calendar-empty {
+  min-height: 34px;
+}
+
+.booking-calendar-day {
+  min-height: 34px;
+  border: 1px solid rgba(47, 133, 90, 0.14);
   border-radius: 8px;
-  border: 1px solid rgba(47, 133, 90, 0.2);
-  font-family: inherit;
-  font-size: 1rem;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.booking-calendar-day.is-today {
+  border-color: rgba(47, 133, 90, 0.5);
+  font-weight: 700;
+}
+
+.booking-calendar-day.is-selected {
+  background: var(--primary-dark);
+  color: #fff;
+  border-color: var(--primary-dark);
+}
+
+.booking-calendar-day.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.booking-calendar-selected {
+  margin-bottom: 0.85rem;
+  color: var(--muted);
+}
+
+.booking-calendar-selected strong {
+  color: var(--ink);
 }
 
 .booking-form-modal {

@@ -206,8 +206,19 @@
           <h3 id="booking-modal-title">Pick a Day</h3>
           <p class="booking-modal-subtext">Select a date to continue to the booking form.</p>
           <p class="booking-modal-now">Current date &amp; time: <strong id="booking-current-datetime"></strong></p>
-          <label for="booking-modal-date" class="booking-modal-label">Date</label>
-          <input type="date" id="booking-modal-date" class="booking-modal-date-input" required>
+          <div class="booking-calendar" id="booking-calendar" aria-label="Booking calendar">
+            <div class="booking-calendar-header">
+              <button type="button" class="booking-calendar-nav" id="booking-calendar-prev" aria-label="Previous month">❮</button>
+              <p class="booking-calendar-month" id="booking-calendar-month"></p>
+              <button type="button" class="booking-calendar-nav" id="booking-calendar-next" aria-label="Next month">❯</button>
+            </div>
+            <div class="booking-calendar-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="booking-calendar-grid" id="booking-calendar-grid"></div>
+          </div>
+          <p class="booking-calendar-selected">Selected date: <strong id="booking-selected-date-text">Not selected</strong></p>
+          <input type="hidden" id="booking-modal-date" required>
           <button type="button" class="btn primary" id="booking-date-continue">Continue to Form</button>
         </div>
 
