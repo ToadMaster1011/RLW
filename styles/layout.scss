@@ -24,10 +24,14 @@
   z-index: 40;
   
   .header-inner {
-    @include flex(row);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'brand nav'
+      'social nav';
     align-items: center;
-    justify-content: space-between;
-    gap: $space-lg;
+    column-gap: $space-lg;
+    row-gap: $space-sm;
     padding: $space-md 0;
   }
 }
