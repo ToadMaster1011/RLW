@@ -1,3 +1,6 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 // Global typography
 html {
   font-family: $font-sans;

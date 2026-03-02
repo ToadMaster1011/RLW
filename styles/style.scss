@@ -2,19 +2,19 @@
 // Compile this file to styles.css
 
 // Variables & Functions
-@import 'variables';
+@use 'variables';
 
 // Mixins & Helper Functions
-@import 'mixins';
+@use 'mixins';
 
 // Typography
-@import 'typography';
+@use 'typography';
 
 // Layout & Sections
-@import 'layout';
+@use 'layout';
 
 // Components
-@import 'components';
+@use 'components';
 
 // Utilities & Animations
-@import 'utilities';
+@use 'utilities';

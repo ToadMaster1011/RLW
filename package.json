@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build:css": "sass styles/style.scss styles.css && sass styles/style.scss styles.min.css --compressed",
+    "build:css": "sass styles/style.scss styles.css && sass styles/style.scss styles.min.css --style=compressed",
     "watch:css": "sass --watch styles:. --watch styles/style.scss:styles.css"
   },
   "dependencies": {

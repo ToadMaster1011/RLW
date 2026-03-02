@@ -300,14 +300,16 @@ document.getElementById('year').textContent = new Date().getFullYear();
 /* === BOOKING FORMS & POPUP === */
 (function() {
   const emailjsConfig = window.EMAILJS_CONFIG || {};
+  const hasValue = (value) => typeof value === 'string' && value.trim().length > 0;
+  const looksLikePlaceholder = (value) => typeof value === 'string' && /^YOUR_/i.test(value.trim());
   const emailjsReady =
     typeof emailjs !== 'undefined' &&
-    emailjsConfig.publicKey &&
-    emailjsConfig.publicKey !== 'wapdNFB-3F2V85ECR' &&
-    emailjsConfig.serviceId &&
-    emailjsConfig.serviceId !== 'service_4b0fln9' &&
-    emailjsConfig.templateId &&
-    emailjsConfig.templateId !== 'template_e8wlsfl';
+    hasValue(emailjsConfig.publicKey) &&
+    !looksLikePlaceholder(emailjsConfig.publicKey) &&
+    hasValue(emailjsConfig.serviceId) &&
+    !looksLikePlaceholder(emailjsConfig.serviceId) &&
+    hasValue(emailjsConfig.templateId) &&
+    !looksLikePlaceholder(emailjsConfig.templateId);
 
   if (emailjsReady) {
     emailjs.init({ publicKey: emailjsConfig.publicKey });
@@ -340,40 +342,25 @@ document.getElementById('year').textContent = new Date().getFullYear();
     const title = titleParts.length ? titleParts.join(' • ') : 'New Booking';
 
     try {
-      if (emailjsReady) {
-        const templateParams = {
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          service: data.service || '',
-          date: data.date || '',
-          time: data.time || '',
-          address: data.address || '',
-          notes: data.notes || '',
-          submittedAt,
-          title,
-          to_email: emailjsConfig.toEmail || ''
-        };
-
-        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams);
-      } else {
-        const response = await fetch('/api/bookings', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...data,
-            submittedAt,
-            title
-          })
-        });
-
-        if (!response.ok) {
-          const errorPayload = await response.json().catch(() => ({}));
-          throw new Error(errorPayload.error || 'Unable to save booking right now.');
-        }
+      if (!emailjsReady) {
+        throw new Error('Email service is not configured. Please verify EMAILJS_CONFIG and the EmailJS script include.');
       }
+
+      const templateParams = {
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        service: data.service || '',
+        date: data.date || '',
+        time: data.time || '',
+        address: data.address || '',
+        notes: data.notes || '',
+        submittedAt,
+        title,
+        to_email: emailjsConfig.toEmail || ''
+      };
+
+      await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams);
 
       msgEl.textContent = '✓ Booking requested! We\'ll confirm within 24 hours.';
       msgEl.classList.add('show', 'success');

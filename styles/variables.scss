@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // Color Palette
 $colors: (
   'primary': #2f855a,
@@ -14,7 +16,7 @@ $colors: (
 );
 
 @function color($name) {
-  @return map-get($colors, $name);
+  @return map.get($colors, $name);
 }
 
 // Spacing Scale
