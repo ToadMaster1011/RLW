@@ -1044,7 +1044,7 @@
   }
 }
 
-@media (max-width: 475px) {
+@media (max-width: 1024px) {
   .site-header {
     .header-inner {
       display: grid;
@@ -1103,7 +1103,7 @@
   .nav-toggle {
     display: inline-flex;
     width: 100%;
-    max-width: min(420px, calc(100vw - 3rem));
+    max-width: calc(100vw - 3rem);
     justify-content: center;
     font-weight: $font-weight-semibold;
     font-size: 0.9rem;
@@ -1123,7 +1123,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: min(420px, calc(100vw - 3rem));
+    max-width: calc(100vw - 3rem);
     background: color('card');
     border: 1px solid rgba(color('primary'), 0.14);
     border-radius: $radius-md;
