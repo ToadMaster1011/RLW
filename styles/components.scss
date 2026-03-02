@@ -868,8 +868,6 @@
 
 // Header social icons
 .header-social {
-  grid-area: social;
-  justify-self: start;
   @include flex(row, 0.65rem);
   align-items: center;
 
@@ -897,8 +895,6 @@
 
 // Brand section
 .brand {
-  grid-area: brand;
-  justify-self: start;
   @include link-reset;
   @include flex(row);
   gap: 0.85rem;
@@ -931,9 +927,8 @@
 }
 
 .main-nav {
-  grid-area: nav;
-  justify-self: end;
-  align-self: start;
+  display: flex;
+  align-items: center;
 }
 
 .nav-toggle {
@@ -1012,60 +1007,6 @@
 }
 
 @include bp-md {
-  .site-header {
-    .header-inner {
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-areas:
-        'brand nav'
-        'social social';
-      align-items: center;
-      column-gap: 0.8rem;
-      row-gap: 0.45rem;
-      padding: 0.7rem 0;
-    }
-  }
-
-  .header-social {
-    justify-self: center;
-  }
-
-  .brand {
-    width: auto;
-    min-width: 0;
-    gap: 0.5rem;
-
-    .site-logo {
-      width: 58px;
-      height: 58px;
-    }
-
-    .brand-text {
-      strong {
-        font-size: 0.95rem;
-      }
-
-      small {
-        font-size: 0.72rem;
-      }
-    }
-  }
-
-  .main-nav {
-    width: auto;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .nav-toggle {
-    display: none;
-  }
-
-  .header-social a {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-
   .sticky-cta {
     right: 1rem;
     bottom: 1rem;
@@ -1081,97 +1022,9 @@
   .booking-form {
     padding: 1rem;
   }
-
-  .nav-menu {
-    position: static;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    gap: 0.35rem;
-    display: flex;
-    white-space: nowrap;
-    
-    a {
-      padding: 0.3rem 0.55rem;
-      font-size: 0.82rem;
-    }
-  }
 }
 
 @include bp-sm {
-  .site-header {
-    .header-inner {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        'brand'
-        'social'
-        'nav';
-      row-gap: 0.4rem;
-      padding: 0.5rem 0;
-    }
-  }
-
-  .brand {
-    justify-self: center;
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
-
-    .site-logo {
-      width: 56px;
-      height: 56px;
-    }
-
-    .brand-text {
-      strong {
-        font-size: 0.92rem;
-      }
-
-      small {
-        font-size: 0.72rem;
-      }
-    }
-  }
-
-  .nav-menu {
-    position: static;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    display: flex;
-    white-space: nowrap;
-    overflow-x: auto;
-    padding: 0;
-
-    a {
-      width: auto;
-      padding: 0.3rem 0.55rem;
-      font-size: 0.82rem;
-      text-align: center;
-    }
-  }
-
-  .main-nav {
-    justify-self: center;
-    width: 100%;
-    position: static;
-    display: flex;
-    justify-content: center;
-  }
-
-  .nav-toggle {
-    display: none;
-  }
-
   .header-social {
     gap: 0.45rem;
 
@@ -1192,20 +1045,85 @@
 }
 
 @media (max-width: 475px) {
-  .main-nav {
+  .site-header {
+    .header-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'brand'
+        'social'
+        'nav';
+      justify-items: center;
+      row-gap: 0.4rem;
+      padding: 0.5rem 0;
+    }
+  }
+
+  .brand {
+    flex-direction: column;
+    text-align: center;
     width: auto;
+    min-width: 0;
+    gap: 0.5rem;
+
+    .site-logo {
+      width: 56px;
+      height: 56px;
+    }
+
+    .brand-text {
+      strong {
+        font-size: 0.92rem;
+      }
+
+      small {
+        font-size: 0.72rem;
+      }
+    }
+  }
+
+  .header-social {
+    justify-content: center;
+    gap: 0.45rem;
+
+    a {
+      width: 34px;
+      height: 34px;
+      font-size: 0.85rem;
+    }
+  }
+
+  .main-nav {
+    width: 100%;
     position: relative;
+    display: flex;
+    justify-content: center;
   }
 
   .nav-toggle {
     display: inline-flex;
+    width: 100%;
+    max-width: min(420px, calc(100vw - 3rem));
+    justify-content: center;
+    font-weight: $font-weight-semibold;
+    font-size: 0.9rem;
+
+    .hamburger {
+      margin-right: 0.45rem;
+    }
+
+    &::after {
+      content: 'Menu';
+    }
   }
 
   .nav-menu {
     position: absolute;
-    top: calc(100% + 0.35rem);
-    right: 0;
-    min-width: 190px;
+    top: calc(100% + 0.4rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: min(420px, calc(100vw - 3rem));
     background: color('card');
     border: 1px solid rgba(color('primary'), 0.14);
     border-radius: $radius-md;
