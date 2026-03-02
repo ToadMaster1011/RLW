@@ -828,6 +828,79 @@ main {
   display: none;
 }
 
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  padding: 1.5rem;
+}
+
+.gallery-lightbox.show {
+  display: flex;
+}
+
+.gallery-lightbox-content {
+  position: relative;
+  width: min(1100px, 100%);
+  max-height: 92vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.gallery-lightbox-image {
+  width: 100%;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gallery-lightbox-caption {
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  margin: 0;
+}
+
+.gallery-lightbox-close,
+.gallery-lightbox-prev,
+.gallery-lightbox-next {
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #22543d;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.gallery-lightbox-close {
+  top: -0.5rem;
+  right: -0.5rem;
+}
+
+.gallery-lightbox-prev,
+.gallery-lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gallery-lightbox-prev {
+  left: -1rem;
+}
+
+.gallery-lightbox-next {
+  right: -1rem;
+}
+
 @media (max-width: 1000px) {
   .gallery-shell {
     width: min(1200px, 100% - 2rem);
@@ -871,6 +944,19 @@ main {
     bottom: 0.75rem;
     font-size: 0.82rem;
     padding: 0.4rem 0.55rem;
+  }
+  .gallery-lightbox {
+    padding: 1rem;
+  }
+  .gallery-lightbox-prev {
+    left: 0.2rem;
+  }
+  .gallery-lightbox-next {
+    right: 0.2rem;
+  }
+  .gallery-lightbox-close {
+    top: 0.2rem;
+    right: 0.2rem;
   }
 }
 .reviews-container {
