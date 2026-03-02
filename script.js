@@ -303,11 +303,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const emailjsReady =
     typeof emailjs !== 'undefined' &&
     emailjsConfig.publicKey &&
-    emailjsConfig.publicKey !== 'YOUR_PUBLIC_KEY' &&
+    emailjsConfig.publicKey !== 'wapdNFB-3F2V85ECR' &&
     emailjsConfig.serviceId &&
-    emailjsConfig.serviceId !== 'YOUR_SERVICE_ID' &&
+    emailjsConfig.serviceId !== 'service_4b0fln9' &&
     emailjsConfig.templateId &&
-    emailjsConfig.templateId !== 'YOUR_TEMPLATE_ID';
+    emailjsConfig.templateId !== 'template_e8wlsfl';
 
   if (emailjsReady) {
     emailjs.init({ publicKey: emailjsConfig.publicKey });
