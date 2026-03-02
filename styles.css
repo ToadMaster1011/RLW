@@ -475,7 +475,7 @@ hr {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(15, 23, 42, 0.56);
   z-index: 1;
   pointer-events: none;
 }
@@ -505,6 +505,11 @@ hr {
 .gallery-intro {
   text-align: center;
   margin-bottom: 0;
+  background: rgba(15, 23, 42, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  backdrop-filter: blur(2px);
 }
 
 .gallery-intro h2 {
@@ -521,14 +526,14 @@ hr {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  color: #fff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .gallery-lead {
   max-width: 760px;
   margin: 0.75rem auto 0;
-  color: rgba(255, 255, 255, 0.88);
+  color: #f8fafc;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
@@ -609,8 +614,8 @@ hr {
   bottom: 1rem;
   z-index: 2;
   color: #fff;
-  background: rgba(15, 23, 42, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 8px;
   padding: 0.45rem 0.6rem;
   font-weight: 600;
