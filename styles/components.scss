@@ -936,6 +936,50 @@
   align-self: start;
 }
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba(color('primary'), 0.2);
+  background: rgba(255, 255, 255, 0.94);
+  color: color('primary-dark');
+  cursor: pointer;
+  @include transition(all);
+
+  &:hover {
+    border-color: rgba(color('primary-dark'), 0.45);
+    background: rgba(color('primary-light'), 0.2);
+  }
+
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    position: relative;
+    content: '';
+    @include transition(all);
+  }
+
+  .hamburger::before {
+    position: absolute;
+    top: -6px;
+    left: 0;
+  }
+
+  .hamburger::after {
+    position: absolute;
+    top: 6px;
+    left: 0;
+  }
+}
+
 // Navigation
 .nav-menu {
   @include flex(row);
@@ -973,12 +1017,16 @@
       grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
         'brand nav'
-        'social nav';
+        'social social';
       align-items: center;
       column-gap: 0.8rem;
       row-gap: 0.45rem;
       padding: 0.7rem 0;
     }
+  }
+
+  .header-social {
+    justify-self: center;
   }
 
   .brand {
@@ -1090,16 +1138,43 @@
   }
 
   .nav-menu {
-    justify-content: center;
-    overflow-x: auto;
-    max-width: 100%;
-    gap: 0.3rem;
-    padding-bottom: 0.1rem;
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    right: 0;
+    min-width: 190px;
+    background: color('card');
+    border: 1px solid rgba(color('primary'), 0.14);
+    border-radius: $radius-md;
+    box-shadow: $shadow-lg;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.2rem;
+    display: none;
+    white-space: normal;
+    overflow: visible;
+    padding: 0.45rem;
+
+    &.open {
+      display: flex;
+    }
 
     a {
-      padding: 0.3rem 0.55rem;
-      font-size: 0.82rem;
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      font-size: 0.85rem;
+      text-align: left;
     }
+  }
+
+  .main-nav {
+    justify-self: center;
+    width: auto;
+    position: relative;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
   }
 
   .header-social {
