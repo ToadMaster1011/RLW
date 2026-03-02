@@ -41,84 +41,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   if (!track || !dotsContainer || sourceItems.length === 0) return;
 
-  const projectsById = new Map(sourceItems.map((item) => [item.id, item]));
-
-  const lightbox = (() => {
-    const overlay = document.createElement('div');
-    overlay.className = 'gallery-lightbox';
-    overlay.innerHTML = `
-      <div class="gallery-lightbox-content" role="dialog" aria-modal="true" aria-label="Project image viewer">
-        <button class="gallery-lightbox-close" aria-label="Close viewer">✕</button>
-        <button class="gallery-lightbox-prev" aria-label="Previous image">❮</button>
-        <img class="gallery-lightbox-image" src="" alt="">
-        <button class="gallery-lightbox-next" aria-label="Next image">❯</button>
-        <p class="gallery-lightbox-caption"></p>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const image = overlay.querySelector('.gallery-lightbox-image');
-    const caption = overlay.querySelector('.gallery-lightbox-caption');
-    const closeBtn = overlay.querySelector('.gallery-lightbox-close');
-    const prevImageBtn = overlay.querySelector('.gallery-lightbox-prev');
-    const nextImageBtn = overlay.querySelector('.gallery-lightbox-next');
-
-    let activeProject = null;
-    let activeIndex = 0;
-
-    function renderImage() {
-      if (!activeProject || !activeProject.projectImages.length) return;
-      const currentSrc = activeProject.projectImages[activeIndex];
-      image.src = currentSrc;
-      image.alt = activeProject.alt;
-      caption.textContent = `${activeProject.caption} (${activeIndex + 1}/${activeProject.projectImages.length})`;
-    }
-
-    function close() {
-      overlay.classList.remove('show');
-      document.body.style.overflow = '';
-      activeProject = null;
-    }
-
-    function open(project, startSrc) {
-      activeProject = project;
-      const startIndex = project.projectImages.findIndex((src) => src === startSrc);
-      activeIndex = startIndex >= 0 ? startIndex : 0;
-      renderImage();
-      overlay.classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function nextImage() {
-      if (!activeProject) return;
-      activeIndex = (activeIndex + 1) % activeProject.projectImages.length;
-      renderImage();
-    }
-
-    function prevImage() {
-      if (!activeProject) return;
-      activeIndex = (activeIndex - 1 + activeProject.projectImages.length) % activeProject.projectImages.length;
-      renderImage();
-    }
-
-    closeBtn?.addEventListener('click', close);
-    nextImageBtn?.addEventListener('click', nextImage);
-    prevImageBtn?.addEventListener('click', prevImage);
-
-    overlay.addEventListener('click', (event) => {
-      if (event.target === overlay) close();
-    });
-
-    window.addEventListener('keydown', (event) => {
-      if (!overlay.classList.contains('show')) return;
-      if (event.key === 'Escape') close();
-      if (event.key === 'ArrowRight') nextImage();
-      if (event.key === 'ArrowLeft') prevImage();
-    });
-
-    return { open };
-  })();
-
   const pages = sourceItems.map((project) => {
     const preview = project.previewImages.length ? [...project.previewImages] : [...project.projectImages];
     while (preview.length < 3) {
@@ -148,16 +70,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
       </div>
     </div>
   `).join('');
-
-  track.querySelectorAll('[data-project-id]').forEach((figure) => {
-    figure.addEventListener('click', () => {
-      const projectId = figure.getAttribute('data-project-id');
-      const startSrc = figure.getAttribute('data-image-src');
-      const project = projectsById.get(projectId || '');
-      if (!project) return;
-      lightbox.open(project, startSrc || project.src);
-    });
-  });
 
   let current = 0;
   dotsContainer.innerHTML = '';
