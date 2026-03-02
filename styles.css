@@ -1626,6 +1626,8 @@ main {
   .brand .site-logo {
     width: 220px;
     height: 80px;
+    object-fit: contain;
+    object-position: center;
   }
   .brand .brand-text {
     display: none;
