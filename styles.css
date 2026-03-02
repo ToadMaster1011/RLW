@@ -1624,8 +1624,8 @@ main {
 }
 @media (max-width: 425px) {
   .brand .site-logo {
-    width: 100px;
-    height: 300px;
+    width: 250px;
+    height: 100px;
   }
   .brand .brand-text {
     display: none;
