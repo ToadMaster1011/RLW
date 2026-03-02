@@ -866,6 +866,33 @@
   }
 }
 
+// Header social icons
+.header-social {
+  @include flex(row, 0.65rem);
+  align-items: center;
+
+  a {
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-full;
+    @include center;
+    text-decoration: none;
+    color: color('primary-dark');
+    background: rgba(color('primary-light'), 0.15);
+    border: 1px solid rgba(color('primary'), 0.2);
+    font-size: 1.12rem;
+    @include transition(all);
+
+    &:hover {
+      color: #fff;
+      @include gradient(color('primary'), color('primary-dark'));
+      border-color: transparent;
+      transform: translateY(-1px);
+      box-shadow: $shadow-md;
+    }
+  }
+}
+
 // Brand section
 .brand {
   @include link-reset;
@@ -931,6 +958,12 @@
 }
 
 @include bp-md {
+  .header-social a {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
   .nav-menu {
     position: absolute;
     right: $space-lg;
@@ -945,6 +978,18 @@
     
     &.open {
       display: flex;
+    }
+  }
+}
+
+@include bp-sm {
+  .header-social {
+    gap: 0.45rem;
+
+    a {
+      width: 38px;
+      height: 38px;
+      font-size: 0.95rem;
     }
   }
 }
