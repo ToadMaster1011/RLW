@@ -325,23 +325,34 @@ document.getElementById('year').textContent = new Date().getFullYear();
     const data = Object.fromEntries(new FormData(form).entries());
 
     try {
-      if (!emailjsReady) {
-        throw new Error('Email service is not configured yet. Add your EmailJS keys in index.html.');
+      if (emailjsReady) {
+        const templateParams = {
+          name: data.name || '',
+          email: data.email || '',
+          phone: data.phone || '',
+          service: data.service || '',
+          date: data.date || '',
+          time: data.time || '',
+          address: data.address || '',
+          notes: data.notes || '',
+          to_email: emailjsConfig.toEmail || ''
+        };
+
+        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams);
+      } else {
+        const response = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const errorPayload = await response.json().catch(() => ({}));
+          throw new Error(errorPayload.error || 'Unable to save booking right now.');
+        }
       }
-
-      const templateParams = {
-        name: data.name || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        service: data.service || '',
-        date: data.date || '',
-        time: data.time || '',
-        address: data.address || '',
-        notes: data.notes || '',
-        to_email: emailjsConfig.toEmail || ''
-      };
-
-      await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams);
 
       msgEl.textContent = '✓ Booking requested! We\'ll confirm within 24 hours.';
       msgEl.classList.add('show', 'success');
