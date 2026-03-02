@@ -335,6 +335,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
     msgEl.classList.remove('show', 'success', 'error');
 
     const data = Object.fromEntries(new FormData(form).entries());
+    const submittedAt = data.submittedAt || new Date().toISOString();
+    const titleParts = [data.service, data.date, data.name].filter(Boolean);
+    const title = titleParts.length ? titleParts.join(' • ') : 'New Booking';
 
     try {
       if (emailjsReady) {
@@ -347,7 +350,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
           time: data.time || '',
           address: data.address || '',
           notes: data.notes || '',
-          submittedAt: data.submittedAt || '',
+          submittedAt,
+          title,
           to_email: emailjsConfig.toEmail || ''
         };
 
@@ -358,7 +362,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({
+            ...data,
+            submittedAt,
+            title
+          })
         });
 
         if (!response.ok) {
