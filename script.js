@@ -1,5 +1,31 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
+/* === ANALYTICS (GA4 OPTIONAL) === */
+(function() {
+  const measurementId = (window.SITE_ANALYTICS && window.SITE_ANALYTICS.ga4MeasurementId || '').trim();
+  const dataLayerName = 'dataLayer';
+
+  window.siteTrackEvent = function(eventName, params = {}) {
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', eventName, params);
+  };
+
+  if (!measurementId) return;
+
+  window[dataLayerName] = window[dataLayerName] || [];
+  window.gtag = window.gtag || function() {
+    window[dataLayerName].push(arguments);
+  };
+
+  const gaScript = document.createElement('script');
+  gaScript.async = true;
+  gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+  document.head.appendChild(gaScript);
+
+  window.gtag('js', new Date());
+  window.gtag('config', measurementId);
+})();
+
 /* === VIEWPORT FIT FOR GALLERY === */
 (function() {
   const root = document.documentElement;
@@ -226,6 +252,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
       const startSrc = figure.getAttribute('data-image-src');
       const project = projectsById.get(projectId || '');
       if (!project) return;
+      window.siteTrackEvent?.('gallery_image_open', {
+        project_id: project.id,
+        project_name: project.caption
+      });
       lightbox.open(project, startSrc || project.src);
     });
   });
@@ -302,6 +332,24 @@ document.getElementById('year').textContent = new Date().getFullYear();
   });
 
   update();
+})();
+
+/* === CLICK TRACKING === */
+(function() {
+  document.querySelectorAll('a[href^="tel:"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      window.siteTrackEvent?.('click_to_call', {
+        phone: link.getAttribute('href') || ''
+      });
+    });
+  });
+
+  const viewAllImagesLink = document.querySelector('.stat-link[href="all-images.html"]');
+  viewAllImagesLink?.addEventListener('click', () => {
+    window.siteTrackEvent?.('view_all_images_click', {
+      location: 'stats_section'
+    });
+  });
 })();
 
 /* === REVIEWS AUTO-SCROLL === */
@@ -467,6 +515,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
       }
 
       if (ok) {
+        window.siteTrackEvent?.('booking_submit_success', {
+          source: 'main_form'
+        });
         mainForm.reset();
       }
     });
@@ -699,6 +750,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
     modalSubmitBtn.textContent = originalSubmitText;
 
     if (ok) {
+      window.siteTrackEvent?.('booking_submit_success', {
+        source: 'modal_form'
+      });
       modalForm.reset();
       modalFormDate.value = '';
       setTimeout(() => {

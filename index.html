@@ -63,6 +63,8 @@
             <a href="#about">About</a>
             <a href="#services">Services</a>
             <a href="#gallery">Portfolio</a>
+            <a href="all-images.html">All Images</a>
+            <a href="service-areas.html">Service Areas</a>
             <a href="#booking" class="nav-cta">Get Started</a>
           </div>
         </nav>
@@ -105,9 +107,10 @@
 
       <section class="section stats">
         <div class="container stats-grid">
-          <div class="stats-cta-wrap">
-            <a href="all-images.html" class="btn stats-view-all-btn">View All Images</a>
-          </div>
+          <a href="all-images.html" class="stat stat-link" aria-label="View all project images">
+            <div class="number">View</div>
+            <div class="label">All Images</div>
+          </a>
           <div class="stat">
             <div class="number">3000+</div>
             <div class="label">Lawns Maintained</div>
@@ -139,6 +142,11 @@
               <p>Reliable property maintenance and landscape services for businesses.</p>
             </article>
           </div>
+          <p class="services-links">
+            <a href="all-images.html">Browse full project gallery</a>
+            <span aria-hidden="true">•</span>
+            <a href="service-areas.html">View service areas and offerings</a>
+          </p>
         </div>
       </section>
 
@@ -296,6 +304,10 @@
     <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
 
     <script>
+      window.SITE_ANALYTICS = {
+        ga4MeasurementId: 'G-XXXXXXXXXX'
+      };
+
       window.EMAILJS_CONFIG = {
         publicKey: 'wapdNFB-3F2V85ECR',
         serviceId: 'service_4b0fln9',

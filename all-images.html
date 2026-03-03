@@ -59,6 +59,8 @@
             <a href="index.html#about">About</a>
             <a href="index.html#services">Services</a>
             <a href="index.html#gallery">Portfolio</a>
+            <a href="all-images.html">All Images</a>
+            <a href="service-areas.html">Service Areas</a>
             <a href="index.html#booking" class="nav-cta">Get Started</a>
           </div>
         </nav>
@@ -71,6 +73,11 @@
           <div class="all-images-header">
             <h2>All Project Images</h2>
             <p>Browse every photo currently available in our project library.</p>
+            <p class="all-images-links">
+              <a href="service-areas.html">See service areas</a>
+              <span aria-hidden="true">•</span>
+              <a href="index.html#booking">Book a service</a>
+            </p>
           </div>
           <div class="all-images-grid" id="all-images-grid"></div>
         </div>
@@ -90,6 +97,10 @@
     </footer>
 
     <script>
+      window.SITE_ANALYTICS = {
+        ga4MeasurementId: 'G-XXXXXXXXXX'
+      };
+
       (function() {
         const imageNames = [
           'IMG-20260228-WA0031.jpg',

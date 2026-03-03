@@ -268,18 +268,17 @@ hr {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
 }
-.stats .stats-cta-wrap {
-  display: none;
-}
-.stats .stats-view-all-btn {
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+.stats .stat-link {
   text-decoration: none;
+  transition: all 250ms ease-in-out;
 }
-.stats .stats-view-all-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+.stats .stat-link .number,
+.stats .stat-link .label {
   color: #fff;
+}
+.stats .stat-link:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.18);
 }
 .stats .stat {
   background: rgba(255, 255, 255, 0.1);
@@ -303,21 +302,6 @@ hr {
     grid-template-columns: 1fr;
   }
 }
-@media (min-width: 1025px) {
-  .stats .container.stats-grid {
-    position: relative;
-    padding-top: 3.2rem;
-  }
-  .stats .stats-cta-wrap {
-    display: flex;
-    justify-content: flex-end;
-    position: absolute;
-    top: 0;
-    right: 1.5rem;
-    left: 1.5rem;
-  }
-}
-
 .services {
   background: #ffffff;
 }
@@ -731,6 +715,19 @@ main {
   max-width: 760px;
 }
 
+.all-images-links,
+.services-links {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.all-images-links span,
+.services-links span {
+  margin: 0 0.45rem;
+  color: #718096;
+}
+
 .all-images-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -756,6 +753,32 @@ main {
   padding: 0.6rem 0.75rem;
   font-size: 0.78rem;
   color: #4a5568;
+}
+
+.service-areas-page {
+  background: linear-gradient(to bottom, #eaf7ef, #f3faf5);
+}
+
+.service-areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.service-area-card {
+  background: #fff;
+  border: 1px solid rgba(47, 133, 90, 0.14);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.service-area-card h3 {
+  margin-bottom: 0.45rem;
+}
+
+.service-area-card p {
+  margin-bottom: 0;
 }
 
 .gallery-premium {
