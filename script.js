@@ -6,6 +6,95 @@ document.getElementById('year').textContent = new Date().getFullYear();
     if (typeof window.gtag !== 'function') return;
     window.gtag('event', eventName, params);
   };
+
+  window.siteTrackEvent('test_ga_event', {
+    page_path: window.location.pathname,
+    page_title: document.title,
+    non_interaction: true
+  });
+})();
+
+/* === CONSENT MODE BANNER === */
+(function() {
+  const storageKey = 'rlw_analytics_consent_v1';
+
+  function updateConsent(analyticsGranted) {
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('consent', 'update', {
+      analytics_storage: analyticsGranted ? 'granted' : 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+  }
+
+  function saveChoice(value) {
+    try {
+      localStorage.setItem(storageKey, value);
+    } catch (_) {
+      return;
+    }
+  }
+
+  function getChoice() {
+    try {
+      return localStorage.getItem(storageKey);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function trackConsentChoice(status) {
+    window.siteTrackEvent?.('consent_choice', { status });
+  }
+
+  const storedChoice = getChoice();
+  if (storedChoice === 'accepted') {
+    updateConsent(true);
+    trackConsentChoice('accepted');
+    return;
+  }
+
+  if (storedChoice === 'declined') {
+    updateConsent(false);
+    return;
+  }
+
+  const banner = document.createElement('div');
+  banner.className = 'cookie-consent';
+  banner.setAttribute('role', 'dialog');
+  banner.setAttribute('aria-live', 'polite');
+  banner.setAttribute('aria-label', 'Cookie settings');
+  banner.innerHTML = `
+    <p class="cookie-consent-text">We use analytics cookies to understand website traffic and improve your experience.</p>
+    <div class="cookie-consent-actions">
+      <button type="button" class="btn cookie-btn" data-consent="declined">Decline</button>
+      <button type="button" class="btn primary cookie-btn" data-consent="accepted">Accept Analytics</button>
+    </div>
+  `;
+
+  document.body.appendChild(banner);
+
+  banner.querySelectorAll('.cookie-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const choice = button.getAttribute('data-consent');
+      const accepted = choice === 'accepted';
+
+      updateConsent(accepted);
+      saveChoice(choice || 'declined');
+      trackConsentChoice(accepted ? 'accepted' : 'declined');
+
+      if (accepted) {
+        window.siteTrackEvent?.('test_ga_event', {
+          page_path: window.location.pathname,
+          page_title: document.title,
+          consent_status: 'accepted'
+        });
+      }
+
+      banner.remove();
+    });
+  });
 })();
 
 /* === VIEWPORT FIT FOR GALLERY === */
