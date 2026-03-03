@@ -459,6 +459,13 @@ hr {
   transform: translateY(-2px);
 }
 
+.site-footer .powered-by {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #718096;
+}
+
 main {
   min-height: calc(100vh - 400px);
 }
@@ -1500,6 +1507,13 @@ main {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+@media (min-width: 1025px) {
+  .nav-menu a.nav-cta {
+    animation: navCtaShakeCycle 14s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
 @media (max-width: 768px) {
   .sticky-cta {
     right: 1rem;
@@ -1683,6 +1697,15 @@ main {
   }
   50% {
     opacity: 0.5;
+  }
+}
+
+@keyframes navCtaShakeCycle {
+  0%, 3%, 6%, 9%, 12%, 15%, 18%, 21%, 24%, 27%, 28.57%, 100% {
+    transform: translateY(0);
+  }
+  1.5%, 4.5%, 7.5%, 10.5%, 13.5%, 16.5%, 19.5%, 22.5%, 25.5% {
+    transform: translateY(-3px);
   }
 }
 .animate-in {
