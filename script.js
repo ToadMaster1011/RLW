@@ -2,28 +2,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 /* === ANALYTICS (GA4 OPTIONAL) === */
 (function() {
-  const measurementId = (window.SITE_ANALYTICS && window.SITE_ANALYTICS.ga4MeasurementId || '').trim();
-  const dataLayerName = 'dataLayer';
-
   window.siteTrackEvent = function(eventName, params = {}) {
     if (typeof window.gtag !== 'function') return;
     window.gtag('event', eventName, params);
   };
-
-  if (!measurementId) return;
-
-  window[dataLayerName] = window[dataLayerName] || [];
-  window.gtag = window.gtag || function() {
-    window[dataLayerName].push(arguments);
-  };
-
-  const gaScript = document.createElement('script');
-  gaScript.async = true;
-  gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-  document.head.appendChild(gaScript);
-
-  window.gtag('js', new Date());
-  window.gtag('config', measurementId);
 })();
 
 /* === VIEWPORT FIT FOR GALLERY === */
@@ -449,6 +431,45 @@ document.getElementById('year').textContent = new Date().getFullYear();
     return `${year}-${month}-${day}`;
   };
 
+  const toLocalHM = (date) => {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+  function applyFormDateTimeDefaults(form, options = {}) {
+    if (!form) return;
+
+    const now = new Date();
+    const dateInput = form.querySelector('input[name="date"]');
+    const timeInput = form.querySelector('input[name="time"]');
+    const dateValue = options.dateValue || toLocalYMD(now);
+    const timeValue = options.timeValue || toLocalHM(now);
+    const forceDate = Boolean(options.forceDate);
+    const forceTime = Boolean(options.forceTime);
+
+    if (dateInput && (forceDate || !dateInput.value)) {
+      dateInput.value = dateValue;
+    }
+
+    if (timeInput && (forceTime || !timeInput.value)) {
+      timeInput.value = timeValue;
+    }
+  }
+
+  function wireTimePickerInput(input) {
+    if (!input) return;
+
+    const openPicker = () => {
+      if (typeof input.showPicker === 'function') {
+        input.showPicker();
+      }
+    };
+
+    input.addEventListener('click', openPicker);
+    input.addEventListener('focus', openPicker);
+  }
+
   async function submitBooking(form, msgEl) {
     if (!form || !msgEl) return false;
 
@@ -494,6 +515,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const mainForm = document.getElementById('booking-form');
   const mainMessage = document.getElementById('message');
   if (mainForm && mainMessage) {
+    applyFormDateTimeDefaults(mainForm);
+    wireTimePickerInput(mainForm.querySelector('input[name="time"]'));
+
     const mainSubmitBtn = mainForm.querySelector('button[type="submit"]');
 
     mainForm.addEventListener('submit', async (e) => {
@@ -519,6 +543,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
           source: 'main_form'
         });
         mainForm.reset();
+        applyFormDateTimeDefaults(mainForm);
       }
     });
   }
@@ -663,6 +688,12 @@ document.getElementById('year').textContent = new Date().getFullYear();
     modalMessage.textContent = '';
     modalMessage.classList.remove('show', 'success', 'error');
 
+    applyFormDateTimeDefaults(modalForm, {
+      forceDate: true,
+      forceTime: true,
+      dateValue: selectedDate
+    });
+
     showCalendarStep();
     modal.classList.add('show');
     modal.setAttribute('aria-hidden', 'false');
@@ -703,6 +734,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
 
     modalFormDate.value = calendarInput.value;
+    applyFormDateTimeDefaults(modalForm, {
+      forceDate: true,
+      dateValue: calendarInput.value
+    });
     showFormStep();
     modalForm.querySelector('input[name="name"]')?.focus();
   });
@@ -721,6 +756,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
     visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
     renderCalendar();
   });
+
+  wireTimePickerInput(modalForm.querySelector('input[name="time"]'));
 
   modalForm.addEventListener('submit', async (e) => {
     e.preventDefault();

@@ -611,6 +611,9 @@ main {
 .booking-form select {
   cursor: pointer;
 }
+.booking-form input[type=time] {
+  cursor: pointer;
+}
 .booking-form textarea {
   resize: vertical;
   min-height: 80px;
