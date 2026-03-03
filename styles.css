@@ -1487,45 +1487,6 @@ main {
   gap: 0.65rem;
   align-items: center;
 }
-
-i.fa,
-i.fas,
-i.fab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-style: normal;
-  line-height: 1;
-}
-
-i.fa::before,
-i.fas::before,
-i.fab::before {
-  display: inline-block;
-}
-
-i.fa-facebook-f::before {
-  content: "f";
-  font-weight: 700;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-i.fa-tiktok::before {
-  content: "♪";
-}
-
-i.fa-door-open::before {
-  content: "⌂";
-}
-
-i.fa-phone::before {
-  content: "☎";
-}
-
-i.fa-calendar-alt::before {
-  content: "📅";
-}
-
 .header-social a {
   width: 44px;
   height: 44px;
