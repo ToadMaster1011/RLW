@@ -15,6 +15,77 @@ document.getElementById('year').textContent = new Date().getFullYear();
   window.addEventListener('orientationchange', updateHeaderHeightVar);
 })();
 
+/* === GALLERY BACKGROUND VIDEO TIMELINE === */
+(function() {
+  const bgVideo = document.querySelector('.gallery-bg-video');
+  if (!bgVideo) return;
+
+  const maxClipSeconds = 15;
+  const sourceElements = Array.from(bgVideo.querySelectorAll('source'));
+  const playlistFromData = (bgVideo.dataset.videoPlaylist || '')
+    .split('|')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+  const playlistFallback = sourceElements
+    .map((source) => (source.getAttribute('src') || '').trim())
+    .filter(Boolean);
+  const playlist = Array.from(new Set((playlistFromData.length ? playlistFromData : playlistFallback)));
+
+  if (playlist.length === 0) return;
+
+  let activeIndex = 0;
+  let clipTimer = null;
+
+  function clearClipTimer() {
+    if (!clipTimer) return;
+    clearTimeout(clipTimer);
+    clipTimer = null;
+  }
+
+  function playCurrentVideo() {
+    bgVideo.src = playlist[activeIndex];
+    bgVideo.loop = true;
+    bgVideo.load();
+    const playPromise = bgVideo.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  }
+
+  function playNextVideo() {
+    activeIndex = (activeIndex + 1) % playlist.length;
+    playCurrentVideo();
+  }
+
+  function scheduleClipCutoff() {
+    clearClipTimer();
+
+    const remainingMs = (maxClipSeconds - bgVideo.currentTime) * 1000;
+    if (remainingMs <= 0) {
+      playNextVideo();
+      return;
+    }
+
+    clipTimer = setTimeout(() => {
+      playNextVideo();
+    }, remainingMs);
+  }
+
+  bgVideo.addEventListener('play', () => {
+    scheduleClipCutoff();
+  });
+
+  bgVideo.addEventListener('pause', clearClipTimer);
+
+  bgVideo.addEventListener('ended', () => {
+    playNextVideo();
+  });
+
+  window.addEventListener('beforeunload', clearClipTimer);
+
+  playCurrentVideo();
+})();
+
 /* === GALLERY PREMIUM SLIDER === */
 (function() {
   const slider = document.getElementById('gallery-slider');
